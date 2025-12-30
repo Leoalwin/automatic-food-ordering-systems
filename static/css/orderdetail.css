@@ -1,0 +1,90 @@
+/* Page background and font */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff8f0;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Center the table on the page */
+center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+
+/* Table container */
+table {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-collapse: collapse;
+  width: 420px;
+}
+
+/* Heading */
+h2 {
+  text-align: center;
+  color: #ff6600;
+  font-size: 26px;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+/* Table data cells */
+td {
+  padding: 10px 8px;
+  font-size: 16px;
+  color: #444;
+  border-bottom: 1px solid #f1f1f1;
+}
+
+/* Table layout */
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Confirm button link */
+a {
+  display: inline-block;
+  background-color: #ff6600;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Hover effect */
+a:hover {
+  background-color: #e65c00;
+  transform: scale(1.05);
+}
+
+/* Center align confirm button */
+tr:last-child td {
+  text-align: center;
+  padding-top: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  table {
+    width: 90%;
+    padding: 20px;
+  }
+  h2 {
+    font-size: 22px;
+  }
+  td {
+    font-size: 15px;
+  }
+  a {
+    padding: 8px 16px;
+    font-size: 15px;
+  }
+}

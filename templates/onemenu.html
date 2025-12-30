@@ -1,0 +1,13 @@
+<html>
+    <body>
+          <h1>Restaurants</h1>
+            {% for r in restaurants %}
+              <p>
+                <a href="{% url 'selectprocess' %}?restaurant_id={{ r.restaurant_id }}">{{ r.restaurant_name }}</a>
+
+              </p>
+              {% endfor %}
+            </form>
+    </body>
+</html>
+        

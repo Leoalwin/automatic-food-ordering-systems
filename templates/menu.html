@@ -1,0 +1,19 @@
+
+  {% load static %}
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="{% static 'css/menureg.css' %}">
+</head>
+  <body>
+    <h1>MENU ITEMS REGISTRATION</h1>
+    <form method="POST" action="{% url 'menuprocess' %}" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <p>Item Name: <input type="text" name="iname"/></p>
+      <p>Price: <input type="text" name="price"/></p>
+      <input type="hidden" name="restaurant_id" value="{{ restaurant.restaurant.id }}">
+      <p>Upload Food Image: <input type="file" name="foodimage"/></p>
+      <input type="submit" value="REGISTER" />
+    </form>
+  </body>
+</html>

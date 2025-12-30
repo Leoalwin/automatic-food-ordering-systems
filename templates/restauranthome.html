@@ -1,0 +1,133 @@
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - Restaurant Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <h1 class="logo">Foody</h1>
+    </header>
+
+<section class="hero">
+        <div class="hero-text">
+            <h2>Welcome, {{ restaurant.username }}</h2>
+            <p>Manage your restaurant, menus, and orders easily.</p>
+            <form method="POST" action="{% url 'restauranthome' %}">
+                {% csrf_token %}
+                <div class="hero-buttons">
+                    <input type="submit" name="action" value="Restaurant Details" class="btn">
+                    <input type="submit" name="action" value="View Orders" class="btn">
+                    <input type="submit" name="action" value="Menu Details" class="btn">
+                    <input type="submit" name="action" value="Add Menus" class="btn">
+                    <input type="submit" name="action" value="Accept Order" class="btn">
+                    <input type="submit" name="action" value="Logout" class="btn logout">
+                </div>
+            </form>
+        </div>
+
+        <div class="hero-image">
+            <img src="{% static 'images/streetfood.jpg' %}" alt="Restaurant Food">
+        </div>
+    </section>
+
+    <main class="content">
+        {% if show %}
+        <section class="details">
+            <h3>Restaurant Details</h3>
+            <p><strong>Name:</strong> {{ restaurant.restaurant_name }}</p>
+            <p><strong>User:</strong> {{ restaurant.username }}</p>
+            <p><strong>Email:</strong> {{ restaurant.user.email }}</p>
+            <p><strong>Phone:</strong> {{ restaurant.restaurant_phone_number }}</p>
+            <p><strong>Address:</strong> {{ restaurant.restaurant_address }}</p>
+        </section>
+        {% endif %}
+
+        {% if menu %}
+        <section class="menus">
+            <h3>Menu for {{ restaurant.restaurant_name }}</h3>
+            <table class="menu-table">
+                <tr>
+                    <th>Item Name</th><th>Price</th><th>Image</th><th>Action</th>
+                </tr>
+                {% for m in menu %}
+                <tr>
+                    <td>{{ m.item_name }}</td>
+                    <td>₹{{ m.price }}</td>
+                    <td><img src="{{ m.image.url }}" alt="{{ m.item_name }}" width="60" height="50"></td>
+                    <td><a href="{% url 'delete_menu' %}?menu_id={{ m.menu_id }}" class="delete-btn">Delete</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+
+        {% if order %}
+        <section class="orders">
+            <h3>New Orders</h3>
+            <table class="order-table">
+                <tr>
+                    <th>Order ID</th><th>Customer</th><th>Total</th><th>Status</th><th>Date</th><th>Action</th>
+                </tr>
+                {% for o in order %}
+                <tr>
+                    <td>{{ o.order_id }}</td>
+                    <td>{{ o.customer.user.username }}</td>
+                    <td>₹{{ o.total }}</td>
+                    <td>{{ o.status }}</td>
+                    <td>{{ current_datetime|date:"d-m-Y H:i:s" }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'assign_order' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="order_id" value="{{ o.order_id }}">
+                            <button type="submit" name="action" value="select" class="btn small">Select</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+
+        {% if orders %}
+        <section class="orders">
+            <h3>Assigned Orders</h3>
+            <table class="order-table">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Assigned Time</th>
+                    <th>Accept Time</th>
+                    <th>Action</th>
+                </tr>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.restaurant.restaurant_name }}</td>
+                    <td>₹{{ order.total }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.assigned_time|default:"Not Assigned" }}</td>
+                    <td>{{ order.pickup_time|default:"Not Picked" }}</td>
+                    <td>
+                        {% if order.status == "Accept" %}
+                        <form method="POST" action="{% url 'restauranthome' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="pick">
+                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                            <button type="submit" class="btn small">Pickup</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>

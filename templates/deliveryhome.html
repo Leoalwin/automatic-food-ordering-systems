@@ -1,0 +1,245 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - Delivery Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <h1 class="logo">Foody</h1>
+        <!-- <nav>
+            <a href="#">Home</a>
+            <a href="#">Orders</a>
+            <a href="#">Profile</a>
+            <a href="#">Support</a>
+        </nav>
+        <button class="signup-btn">Logout</button> -->
+    </header>
+
+    <section class="hero">
+        <div class="hero-text">
+            <h2>Welcome, {{ delivery.username }}</h2>
+            <p>Deliver with speed, accuracy, and style!</p>
+
+            <form method="POST" action="{% url 'deliveryhome' %}">
+                {% csrf_token %}
+                <div class="hero-buttons">
+                    <input type="submit" name="action" value="Your Profile" class="btn">
+                    <input type="submit" name="action" value="Assigned Orders" class="btn">
+                    <input type="submit" name="action" value="Current Order" class="btn">
+                    <input type="submit" name="action" value="Past Order" class="btn">
+                    <input type="submit" name="action" value="Logout" class="btn logout">
+                </div>
+            </form>
+        </div>
+
+        <div class="hero-image">
+            <img src="{% static 'images/delivery.jpg' %}" alt="Delivery Food">
+        </div>
+    </section>
+
+    <main class="content">
+        {% if show %}
+        <section class="details">
+            <h3>Your Details</h3> 
+            <p><strong>Name:</strong> {{ delivery.driver_name }}</p>
+            <p><strong>Email:</strong> {{ delivery.user.email }}</p>
+            <p><strong>Phone:</strong> {{ delivery.driver_phone_number }}</p>
+            <p><strong>Address:</strong> {{ delivery.driver_current_location }}</p>
+        </section>
+        {% endif %}
+
+        {% if orders %}
+        <section class="orders">
+            <h3>Assigned Orders</h3>
+            <table class="order-table">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Assigned Time</th>
+                    <th>Pickup Time</th>
+                    <th>Action</th>
+                </tr>
+                {% for order in orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.restaurant.restaurant_name }}</td>
+                    <td>₹{{ order.total }}</td>
+                    <td>{{ order.status }}</td>
+                    <td>{{ order.assigned_time|default:"Not Assigned" }}</td>
+                    <td>{{ order.pickup_time|default:"Not Picked" }}</td>
+                    <td>
+                        {% if order.status == "assigned" %}
+                        <form method="POST" action="{% url 'deliveryhome' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="accept">
+                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                            <button type="submit" class="btn small">Accept</button>
+                        </form>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+
+        {% if current_order %}
+        <section class="orders">
+            <h3>Current Orders</h3>
+            <table class="order-table">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                {% for ord in order %}
+                <tr>
+                    <td>{{ ord.order_id }}</td>
+                    <td>{{ ord.restaurant.restaurant_name }}</td>
+                    <td>₹{{ ord.total }}</td>
+                    <td>{{ ord.status }}</td>
+                    <td>
+                        <form method="POST" action="{% url 'deliveryhome' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="delivered">
+                            <input type="hidden" name="order_id" value="{{ ord.order_id }}">
+                            <button type="submit" class="btn small">Mark Delivered</button>
+                        </form>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="5">No Current Orders</td></tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+
+        {% if past_orders is not None %}
+        <section class="orders">
+            <h3>Past Orders</h3>
+            <ul class="past-orders">
+                {% for order in past_orders %}
+                <li>Order ID: <strong>{{ order.order_id }}</strong> | Total: ₹{{ order.total }} | Items: {{ order.menu_item }} | Date: {{ order.date }}</li>
+                {% empty %}
+                <li>No past orders.</li>
+                {% endfor %}
+            </ul>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>
+
+
+
+<!-- <html>
+ <body>
+    <h2>Welcome, {{ delivery.username }}</h2>
+
+    <form method="POST" action="{% url 'deliveryhome' %}">
+        {% csrf_token %}
+        <input type="submit" name="action" value="Your Profile">
+        <input type="submit" name="action" value="Assigned Orders">
+        <input type="submit" name="action" value="Current Order">
+        <input type="submit" name="action" value="Past Order">
+        <input type="submit" name="action" value="Logout">
+
+    </form>
+    {% if show %}
+        <h3>Your Details</h3> 
+        <p>Name: {{ delivery.driver_name }}</p>
+        <p>Email: {{ delivery.user.email }}</p>
+        <p>Phone: {{ delivery.driver_phone_number }}</p>
+        <p>Address: {{ delivery.driver_current_location }}</p>
+    {% endif %}
+{% if orders %}
+    <table border="1" cellpadding="5">
+        <tr>
+            <th>Order ID</th>
+            <th>Restaurant</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Assigned Time</th>
+            <th>Pickup Time</th>
+            <th>Action</th>
+        </tr>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.restaurant.restaurant_name }}</td>
+            <td>₹{{ order.total }}</td>
+            <td>{{ order.status }}</td>
+            <td>
+                {% if order.assigned_time %}
+                    {{ order.assigned_time|date:"Y-m-d H:i" }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
+            <td>
+                {% if order.pickup_time %}
+                    {{ order.pickup_time|date:"Y-m-d H:i" }}
+                {% else %}
+                    Not Picked
+                {% endif %}
+            </td>
+            <td>
+                {% if order.status == "assigned" %}
+                    <form method="POST" action="{% url 'deliveryhome' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="accept">
+                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                        <button type="submit">Accept</button>
+                    </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+{% endif %}
+
+
+{% if past_orders is not None %}
+    <h3>Current Orders</h3>
+    <ul>    
+        {% for order in past_orders %}
+            <li>Order ID: {{ order.order_id }} | Total: {{ order.total }}| Items:{{ order.menu_item }}| Date: {{ order.date }}</li>
+        {% empty %}
+            <li>No Past orders.</li>
+        {% endfor %}
+    </ul>
+{% endif %}
+
+
+{% if current_order %}
+<h3>Current Orders</h3>
+<table border="1">
+    <tr><th>Order ID</th><th>Restaurant</th><th>Total</th><th>Status</th><th>Action</th></tr>
+    {% for ord in order %}
+    <tr>
+        <td>{{ ord.order_id }}</td>
+        <td>{{ ord.restaurant.restaurant_name }}</td>
+        <td>₹{{ ord.total }}</td>
+        <td>{{ ord.status }}</td>
+        <td>
+            <form method="POST" action="{% url 'deliveryhome' %}">
+                {% csrf_token %}
+                <input type="hidden" name="action" value="delivered">
+                <input type="hidden" name="order_id" value="{{ ord.order_id }}">
+                <button type="submit">Mark Delivered</button>
+            </form>
+        </td>
+    </tr>
+    {% empty %}
+        <tr><td colspan="5">No Current Orders</td></tr>
+    {% endfor %}
+</table>
+{% endif %} -->

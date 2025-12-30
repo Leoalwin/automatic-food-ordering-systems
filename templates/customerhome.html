@@ -1,0 +1,111 @@
+
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foody - Customer Home</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header class="navbar">
+        <h1 class="logo">Foody</h1>
+    </header>
+    <section class="hero">
+        <div class="hero-text">
+            <h2>It’s not just <span>Food</span>, It’s an Experience.</h2>
+            <p>Welcome, {{ customer.username }}</p>
+            <div class="hero-buttons">
+                <form method="POST" action="{% url 'customerhome' %}">
+                    {% csrf_token %}
+                    <input type="submit" name="action" value="Me" class="btn">
+                    <input type="submit" name="action" value="Orderfood" class="btn">
+                    <input type="submit" name="action" value="Current Order" class="btn">
+                    <input type="submit" name="action" value="Order History" class="btn">
+                    <input type="submit" name="action" value="Logout" class="btn logout">
+                </form>
+            </div>
+        </div>
+        <div class="hero-image">
+            <img src="{% static 'images/food-banner.jpg' %}" alt="Food Image">
+        </div>
+    </section>
+
+    <main class="content">
+        {% if show %}
+        <section class="details">
+            <h3>Your Details</h3>
+            <p><strong>Name:</strong> {{ customer.customer_name }}</p>
+            <p><strong>Email:</strong> {{ customer.user.email }}</p>
+            <p><strong>Phone:</strong> {{ customer.customer_phone_number }}</p>
+            <p><strong>Address:</strong> {{ customer.customer_address }}</p>
+        </section>
+        {% endif %}
+
+        {% if restaurants %}
+        <section class="restaurants">
+            <h3>Available Restaurants</h3>
+            <div class="restaurant-list">
+                {% for r in restaurants %}
+                <a href="{% url 'selectprocess' %}?restaurant_id={{ r.restaurant_id }}" class="restaurant-card">
+                    {{ r.restaurant_name }}
+                </a>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        {% if order_history %}
+        <section class="orders">
+            <h3>Order History</h3>
+            {% for order in order_history %}
+            <div class="order-card">
+                <p>Order ID: <strong>{{ order.order_id }}</strong></p>
+                <p>Total: ₹{{ order.total }}</p>
+                <p>Status: {{ order.status }}</p>
+            </div>
+            {% endfor %}
+        </section>
+        {% endif %}
+
+        {% if current_orders %}
+        <section class="orders">
+            <h3>Current Orders</h3>
+            <table class="order-table">
+                <tr>
+                    <th>Order ID</th>
+                    <th>Restaurant</th>
+                    <th>Items</th>
+                    <th>Assigned Time</th>
+                    <th>Pickup Time</th>
+                    <th>Status</th>
+                </tr>
+                {% for order in current_orders %}
+                <tr>
+                    <td>{{ order.order_id }}</td>
+                    <td>{{ order.restaurant.restaurant_name }}</td>
+                    <td>
+                        <ul>
+                            {% for item in order.items.all %}
+                            <li>{{ item.item_name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </td>
+                    <td>{{ order.assigned_time|default:"Not Assigned" }}</td>
+                    <td>{{ order.pickup_time|default:"Not Picked" }}</td>
+                    <td>{{ order.status }}</td>
+                </tr>
+                {% empty %}
+                <tr><td colspan="6">No current orders.</td></tr>
+                {% endfor %}
+            </table>
+        </section>
+        {% endif %}
+    </main>
+</body>
+</html>
+
+
+
+
+ 

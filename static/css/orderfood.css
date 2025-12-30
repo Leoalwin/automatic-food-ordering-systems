@@ -1,0 +1,119 @@
+/* General page style */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #fff8f0;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+a {
+
+  display: inline-block;
+  background-color: #ff6600;
+  color: white;
+  text-decoration: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-weight: 600;
+  transition: background 0.3s, transform 0.2s;
+}
+
+/* Hover effect */
+a:hover {
+  background-color: #e65c00;
+  transform: scale(1.05);
+}
+
+/* Center content */
+center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+
+/* Table container */
+table {
+  background: #ffffff;
+  padding: 30px 40px;
+  border-radius: 15px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  border-collapse: collapse;
+  width: 400px;
+  text-align: left;
+}
+
+/* Restaurant name heading */
+h2 {
+  text-align: center;
+  color: #ff6600;
+  margin-bottom: 20px;
+  font-size: 24px;
+  letter-spacing: 1px;
+}
+
+/* Image styling */
+img {
+  display: block;
+  margin: 40px auto 30px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+}
+
+/* Table rows */
+td {
+  padding: 10px 5px;
+  font-size: 16px;
+  color: #444;
+}
+
+
+/* Quantity input */
+input[type="number"] {
+  width: 80px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.3s;
+}
+
+input[type="number"]:focus {
+  border-color: #ff6600;
+  box-shadow: 0 0 4px #ffb366;
+}
+
+/* Button styling */
+button {
+  background-color: #ff6600;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: background 0.3s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #e65c00;
+  transform: scale(1.05);
+}
+
+
+/* Responsive design */
+@media (max-width: 600px) {
+  table {
+    width: 90%;
+    padding: 20px;
+  }
+  h2 {
+    font-size: 20px;
+  }
+  td {
+    font-size: 15px;
+  }
+}
+

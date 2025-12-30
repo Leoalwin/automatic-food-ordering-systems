@@ -1,0 +1,48 @@
+{% load static %}
+<html>
+<head>
+    <title>Assign Order</title>
+    <link rel="stylesheet" href="{% static 'css/assign.css' %}">
+</head>
+
+<body>
+    <h2>Assign Order</h2>
+
+    <form method="POST" action="{% url 'assign_order' %}">
+        {% csrf_token %}
+   <center>
+        <table>
+            <tr>
+                <th>Customer</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Item</th>
+            </tr>
+
+            <tr>
+                <td>{{ order.customer.user.username }}</td>
+                <td>{{ order.total }}</td>
+                <td>{{ order.status }}</td>
+                <td>
+                    <ul>
+                        {% for item in order.items.all %}
+                            <li>{{ item.item_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </td>
+            </tr>
+        </table>
+    
+
+        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+
+        <button type="submit" name="action" value="assign">Assigned</button>
+        <button type="submit" name="action" value="Declined">Declined</button>
+    </form>
+
+    <p>
+        <a href="{% url 'restauranthome' %}">Back to Restaurant Home</a>
+    </p>
+</center>
+</body>
+</html>

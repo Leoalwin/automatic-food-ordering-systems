@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Food Ordering</title>
+    <link rel="stylesheet" href="{% static 'css/first.css' %}">
+</head>
+<body>
+
+<!-- LOCATION BAR -->
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-left">
+        <span class="logo">FOODY</span>
+    </div>
+
+    <div class="nav-right">
+    <button>
+        <span class="signin"><a href="login">Login</a></span>  </button>
+        <div class="cart">🍴🍔</div>
+  
+    </div>
+</nav>
+
+<!-- ORDER BANNER -->
+ <section class="order-banner">
+ 
+    <p>For over a decade, we’ve enabled our customers to discover new tastes, delivered right to their doorstep</p>
+ 
+</section>
+
+<!-- BROWSE CATEGORIES -->
+<section class="categories">
+    <h2>BROWSE MENU CATEGORIES</h2>
+
+    <div class="category-grid">
+
+        <!-- BIG CARD -->
+        <div class="category-card big">
+            <img src="{% static 'images/bucket.jpg' %}" alt="All in one">
+            <p>EPIC BUCKET OF THE DAY
+</p>
+        </div>
+
+        <div class="category-card">
+            <img src="{% static 'images/burger.jpg' %}">
+            <p>GOLD EDITION</p>
+        </div>
+
+        <div class="category-card">
+            <img src="{% static 'images/boxmeal.jpg' %}">
+            <p>BOX MEALS</p>
+        </div>
+
+        <div class="category-card">
+            <img src="{% static 'images/RICE BOWLZ.jpg' %}">
+            <p>RICE BOWLZ</p>
+        </div>
+
+        <div class="category-card">
+            <img src="{% static 'images/fried.jpg' %}">
+            <p>FRIED CHICKEN</p>
+        </div>
+
+        <div class="category-card">
+            <img src="{% static 'images/drinks.jpg' %}">
+            <p>BEVERAGES</p>
+        </div>
+
+    </div>
+</section>
+
+</body>
+</html>
